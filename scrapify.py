@@ -111,26 +111,6 @@ def main():
             store_post_in_database(conn, post)
 
         # fetch and display comments from post based on user input
-        '''post_id = input("Enter your choice of Post ID - ")
-        if post_id:
-            selected_post = next((post for post in fetched_posts if post.id == post_id), None)
-            if selected_post:
-                try:
-                    #post = reddit.submission(id=post_id)
-                    comments = selected_post.comments
-
-                    for comment in comments[:5]:
-                        print("Comment printing....")
-                        print("Comment Body - ", comment.body)
-                        print("Author - ", comment.author)
-                        print("\n")
-
-                except prawcore.exceptions.NotFound:
-                    print(f"Post with ID {post_id} not found")
-                except praw.exceptions.PRAWException as e:
-                    print(f"Error: {e}")
-                except Exception as e:
-                    print(f"Unexpected error: {e}")'''
         fetch_posts_comments(conn, fetched_posts=fetched_posts)
 
 
