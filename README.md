@@ -56,7 +56,7 @@ Installation
 
     bash
 
-git clone https://github.com/your-username/reddit-scraper.git
+git clone https://github.com/ben-m-m/webstack-scrapp.git
 
 Install project dependencies:
 
