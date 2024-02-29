@@ -4,9 +4,9 @@ import prawcore
 import sqlite3
 ##########################
 reddit = praw.Reddit(
-    client_id="",
-    client_secret="",
-    user_agent="",
+    client_id="VoVzkNE77Sqxf6SeT4CShg",
+    client_secret="6HPRq0mfA3IMHQFx_frZrCLOI6Ulag",
+    user_agent="Web_Dev_24",
 )
 ######
 
