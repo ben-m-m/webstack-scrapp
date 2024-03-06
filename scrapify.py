@@ -83,7 +83,7 @@ def fetch_posts_comments(conn, fetched_posts):
     post_ids = [post.id for post in fetched_posts]
 
     while True:
-        post_id = input("Enter your choice of Post ID (to fetch) or 'exit' to exit - ")
+        post_id = input("Enter your choice of Post ID (to fetch comments) or 'exit' to move to next page or exit at the end - ")
         if post_id.lower() == 'exit':
             break
         if post_id not in post_ids:
@@ -112,7 +112,7 @@ def fetch_posts_comments(conn, fetched_posts):
 
 def main():
     config_file = "config.ini"
-    database_file = "reddit_post_data.db"
+    database_file = "reddit_posts_data.db"
 
     try:
         reddit = get_reddit_instance(config_file)
