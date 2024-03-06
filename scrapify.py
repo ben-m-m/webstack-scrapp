@@ -79,8 +79,17 @@ def store_post_in_database(conn, post):
 
 def fetch_posts_comments(conn, fetched_posts):
     # fetch comments from post using Chosen ID
-    post_id = input("Enter your choice of Post ID - ")
-    if post_id:
+    # input validation
+    post_ids = [post.id for post in fetched_posts]
+
+    while True:
+        post_id = input("Enter your choice of Post ID (to fetch) or 'exit' to exit - ")
+        if post_id.lower() == 'exit':
+            break
+        if post_id not in post_ids:
+            print("Invalid post ID. Please enter a valid post ID.")
+            continue
+
         selected_post = next((post for post in fetched_posts if post.id == post_id), None)
         if selected_post:
             try:
