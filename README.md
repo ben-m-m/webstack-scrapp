@@ -1,89 +1,91 @@
-Reddit Scraper and Database
-Overview
+# Reddit Scraper and Database
+
+## Overview
 
 Welcome to the Reddit Scraper and Database project! This tool allows you to efficiently scrape information from a specified subreddit on Reddit, storing the data in a structured database. Whether you're a data enthusiast, researcher, or just curious about Reddit trends, this project provides a valuable resource for extracting and analyzing post information.
-Table of Contents
 
-    Features
-    Architecture
-    Technologies Used
-    Getting Started
-        Prerequisites
-        Installation
-    Usage
-        Fetching Posts
-        Storing Posts in Database
-        Retrieving Comments
-    Development
-        Successes
-        Challenges
-        Areas for Improvement
-    Lessons Learned
-    Demo
-    Future Enhancements
-    Contributing
-    License
+## Table of Contents
 
-Features
+- [Features](#features)
+- [Architecture](#architecture)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+  - [Fetching Posts](#fetching-posts)
+  - [Storing Posts in Database](#storing-posts-in-database)
+  - [Retrieving Comments](#retrieving-comments)
+- [Development](#development)
+  - [Successes](#successes)
+  - [Challenges](#challenges)
+  - [Areas for Improvement](#areas-for-improvement)
+- [Lessons Learned](#lessons-learned)
+- [Demo](#demo)
+- [Future Enhancements](#future-enhancements)
+- [Contributing](#contributing)
+- [License](#license)
 
-    Reddit Data Scraper: Fetch top posts from a specified subreddit.
-    Database Integration: Store post information in a SQLite database.
-    Comment Retrieval: Retrieve and display comments based on post ID.
-    User-Friendly Interface: Simple command-line interface for easy interaction.
+## Features
 
-Architecture
+- **Reddit Data Scraper:** Fetch top posts from a specified subreddit.
+- **Database Integration:** Store post information in a SQLite database.
+- **Comment Retrieval:** Retrieve and display comments based on post ID.
+- **User-Friendly Interface:** Simple command-line interface for easy interaction.
+
+## Architecture
 
 The project follows a client-server architecture:
 
-    Client: Reddit API Wrapper (PRAW) for fetching posts.
-    Server: SQLite Database for storing post data.
+- **Client:** Reddit API Wrapper (PRAW) for fetching posts.
+- **Server:** SQLite Database for storing post data.
 
-Technologies Used
+## Technologies Used
 
-    PRAW (Python Reddit API Wrapper): Interacts with the Reddit API.
-    SQLite Database: Stores post information in a structured format.
-    Python Programming Language: Core scripting and logic.
+- **PRAW (Python Reddit API Wrapper):** Interacts with the Reddit API.
+- **SQLite Database:** Stores post information in a structured format.
+- **Python Programming Language:** Core scripting and logic.
 
-Getting Started
-Prerequisites
+## Getting Started
 
-    Python 3.x installed on your machine.
-    Reddit API credentials (client ID, client secret, user agent).
+### Prerequisites
 
-Installation
+- Python 3.x installed on your machine.
+- Reddit API credentials (client ID, client secret, user agent).
 
-    Clone the repository:
+### Installation
 
-    bash
+1. Clone the repository:
 
-git clone https://github.com/ben-m-m/webstack-scrapp.git
+    ```bash
+    git clone https://github.com/ben-m-m/webstack-scrapp.git
+    ```
 
-Install project dependencies:
+2. Install project dependencies:
 
-bash
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-pip install -r requirements.txt
+3. Set up Reddit API credentials:
 
-Set up Reddit API credentials:
+    - Obtain your Reddit API credentials (client ID, client secret, user agent) from the Reddit Developer portal.
+    - Update `praw.ini` with your credentials:
 
-Obtain your Reddit API credentials (client ID, client secret, user agent) from the Reddit Developer portal.
+        ```ini
+        [DEFAULT]
+        client_id=YOUR_CLIENT_ID
+        client_secret=YOUR_CLIENT_SECRET
+        user_agent=YOUR_USER_AGENT
+        ```
 
-Update praw.ini with your credentials:
+## Usage
 
-ini
-
-    [DEFAULT]
-    client_id=YOUR_CLIENT_ID
-    client_secret=YOUR_CLIENT_SECRET
-    user_agent=YOUR_USER_AGENT
-
-Usage
-Fetching Posts
+### Fetching Posts
 
 To fetch top posts from a subreddit:
 
-bash
-
+```bash
 python3 scraper.py
 
 Storing Posts in Database
