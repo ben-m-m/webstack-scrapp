@@ -2,31 +2,40 @@
 import praw
 import prawcore
 import sqlite3
+import configparser
 ##########################
-reddit = praw.Reddit(
-    client_id="VoVzkNE77Sqxf6SeT4CShg",
-    client_secret="6HPRq0mfA3IMHQFx_frZrCLOI6Ulag",
-    user_agent="Web_Dev_24",
-)
+def get_reddit_instance(config_file):
+    config = configparser.ConfigParser()
+    config.read(config_file)
+
+    reddit_credentials = {
+        "client_id": config.get("reddit", "client_id"),
+        "client_secret": config.get("reddit", "client_secret"),
+        "user_agent": config.get("reddit", "user_agent")
+    }
+
+    return praw.Reddit(**reddit_credentials)
 ######
+def create_database_connection(database_file):
+    conn = sqlite3.connect('reddit_posts_data.db')
+    cursor = conn.cursor()
 
-conn = sqlite3.connect('reddit_posts_data.db')
-cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS posts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
+            post_id TEXT UNIQUE,
+            author TEXT,
+            url TEXT,
+            created_utc INTEGER,
+            upvotes INTEGER,
+            comment_count INTEGER
+        )
+    ''')
 
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS posts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        post_id TEXT UNIQUE,
-        author TEXT,
-        url TEXT,
-        created_utc INTEGER,
-        upvotes INTEGER,
-        comment_count INTEGER
-    )
-''')
+    conn.commit()
 
-conn.commit()
+    return conn
 
 
 def fetch_top_posts(subreddit, time_filter='all', limit=100):
@@ -93,27 +102,36 @@ def fetch_posts_comments(conn, fetched_posts):
 
 
 def main():
-    subreddit_name = input("Subreddit Name ? - ")
-    subreddit = reddit.subreddit(subreddit_name)
+    config_file = "config.ini"
+    database_file = "reddit_post_data.db"
+
+    try:
+        reddit = get_reddit_instance(config_file)
+        conn = create_database_connection(database_file)
+        subreddit_name = input("Subreddit Name ? - ")
+        subreddit = reddit.subreddit(subreddit_name)
     
-    fetched_posts = []
+        fetched_posts = []
 
-    #fetch more posts by iterating through multiple pages
-    for page_number in range(1, 5):
-        print(f"Page {page_number} of {subreddit}")
+        #fetch more posts by iterating through multiple pages
+        for page_number in range(1, 5):
+            print(f"Page {page_number} of {subreddit}")
 
-        #fetch n number of posts per page
-        posts = fetch_top_posts(subreddit, limit=5 * page_number)
+            #fetch n number of posts per page
+            posts = fetch_top_posts(subreddit, limit=5 * page_number)
 
-        for post in posts:
-            fetched_posts.append(post)
-            display_post_info(post)
-            store_post_in_database(conn, post)
+            for post in posts:
+                fetched_posts.append(post)
+                display_post_info(post)
+                store_post_in_database(conn, post)
 
-        # fetch and display comments from post based on user input
-        fetch_posts_comments(conn, fetched_posts=fetched_posts)
+            # fetch and display comments from post based on user input
+            fetch_posts_comments(conn, fetched_posts=fetched_posts)
+
+    finally:
+        if 'conn' in locals() and conn:
+            conn.close()
 
 
 if __name__ == "__main__":
     main()
-    conn.close()
