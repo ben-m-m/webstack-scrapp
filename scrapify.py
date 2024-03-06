@@ -4,6 +4,8 @@ import prawcore
 import sqlite3
 import configparser
 ##########################
+
+
 def get_reddit_instance(config_file):
     config = configparser.ConfigParser()
     config.read(config_file)
@@ -16,6 +18,8 @@ def get_reddit_instance(config_file):
 
     return praw.Reddit(**reddit_credentials)
 ######
+
+
 def create_database_connection(database_file):
     conn = sqlite3.connect('reddit_posts_data.db')
     cursor = conn.cursor()
@@ -42,6 +46,7 @@ def fetch_top_posts(subreddit, time_filter='all', limit=100):
     top_posts = subreddit.top(time_filter=time_filter, limit=limit)
     return list(top_posts)
 
+
 def display_post_info(post):
     print("Title - ", post.title)
     print("ID - ", post.id)
@@ -52,6 +57,7 @@ def display_post_info(post):
     print("Comment count - ", post.num_comments)
     print("\n")
 
+
 def store_post_in_database(conn, post):
     cursor = conn.cursor()
 
@@ -61,7 +67,8 @@ def store_post_in_database(conn, post):
 
     if existing_post is None:
         cursor.execute("""
-            INSERT INTO posts (title, post_id, author, url, created_utc, upvotes, comment_count)
+            INSERT INTO posts (title, post_id, author, url, created_utc,
+                       upvotes, comment_count)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (
             post.title,
@@ -83,14 +90,16 @@ def fetch_posts_comments(conn, fetched_posts):
     post_ids = [post.id for post in fetched_posts]
 
     while True:
-        post_id = input("Enter your choice of Post ID (to fetch comments) or 'exit' to move to next page or exit at the end - ")
+        post_id = input("Enter your choice of Post ID (to fetch comments) "
+                        "or 'exit' to move to next page / exit at the end - ")
         if post_id.lower() == 'exit':
             break
         if post_id not in post_ids:
             print("Invalid post ID. Please enter a valid post ID.")
             continue
 
-        selected_post = next((post for post in fetched_posts if post.id == post_id), None)
+        selected_post = next((post for post in fetched_posts
+                              if post.id == post_id), None)
         if selected_post:
             try:
                 comments = selected_post.comments
@@ -109,7 +118,6 @@ def fetch_posts_comments(conn, fetched_posts):
                 print(f"Unexpected error: {e}")
 
 
-
 def main():
     config_file = "config.ini"
     database_file = "reddit_posts_data.db"
@@ -119,14 +127,14 @@ def main():
         conn = create_database_connection(database_file)
         subreddit_name = input("Subreddit Name ? - ")
         subreddit = reddit.subreddit(subreddit_name)
-    
+
         fetched_posts = []
 
-        #fetch more posts by iterating through multiple pages
+        # fetch more posts by iterating through multiple pages
         for page_number in range(1, 5):
             print(f"Page {page_number} of {subreddit}")
 
-            #fetch n number of posts per page
+            # fetch n number of posts per page
             posts = fetch_top_posts(subreddit, limit=5 * page_number)
 
             for post in posts:
